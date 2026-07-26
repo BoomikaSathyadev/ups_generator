@@ -206,6 +206,7 @@
     <p>Grant access to <span class="modal-name" id="acceptName"></span>?<br/>
     They will be able to login as <strong id="acceptRoleDisplay"></strong>.</p>
     <form id="acceptForm" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
       <input type="hidden" name="role" id="acceptRoleInput"/>
       <div class="modal-actions">
         <button type="button" class="btn-modal-cancel" onclick="closeModals()">Cancel</button>
@@ -225,6 +226,7 @@
     <p>Deny access for <span class="modal-name" id="denyName"></span>?<br/>
     This will remove their request permanently.</p>
     <form id="denyForm" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
       <div class="modal-actions">
         <button type="button" class="btn-modal-cancel" onclick="closeModals()">Cancel</button>
         <button type="submit" class="btn-modal-confirm-deny">Deny</button>

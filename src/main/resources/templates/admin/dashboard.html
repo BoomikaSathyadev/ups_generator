@@ -147,11 +147,13 @@
             <div class="actions">
               <a th:href="@{/admin/users/{id}/edit(id=${user.id})}" class="btn-sm btn-edit">Edit</a>
               <form th:action="@{/admin/users/{id}/toggle-status(id=${user.id})}" method="post" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <button type="submit"
                         th:class="${user.status.name() == 'ACTIVE'} ? 'btn-sm btn-toggle-active' : 'btn-sm btn-toggle-inactive'"
                         th:text="${user.status.name() == 'ACTIVE'} ? 'Deactivate' : 'Activate'">Toggle</button>
               </form>
               <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this user?')">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <button type="submit" class="btn-sm btn-delete">Delete</button>
               </form>
             </div>
