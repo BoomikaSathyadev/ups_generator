@@ -43,6 +43,8 @@
   <form th:action="@{/admin/ups-configs/save}" th:object="${cfg}" method="post">
     <input type="hidden" th:field="*{id}"/>
 
+    <div th:if="${error}" style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1.25rem;font-size:0.875rem;color:#b91c1c;" th:text="${error}"></div>
+
     <p class="section-label">Capacity &amp; Pricing</p>
     <div class="form-row">
       <div class="form-group">

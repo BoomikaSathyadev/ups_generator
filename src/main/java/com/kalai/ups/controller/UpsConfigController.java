@@ -4,12 +4,14 @@ import com.kalai.ups.entity.UpsConfig;
 import com.kalai.ups.repository.PendingUserRepository;
 import com.kalai.ups.repository.UpsConfigRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/ups-configs")
@@ -49,8 +51,23 @@ public class UpsConfigController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute UpsConfig cfg) {
-        upsConfigRepository.save(cfg);
+    public String save(@ModelAttribute UpsConfig cfg, Model model) {
+        // Check for duplicate kVA on new config
+        if (cfg.getId() == null) {
+            boolean duplicate = upsConfigRepository.findByKva(cfg.getKva()).isPresent();
+            if (duplicate) {
+                model.addAttribute("cfg", cfg);
+                model.addAttribute("error", "A config for " + cfg.getKva() + " kVA already exists.");
+                return "admin/ups-config-form";
+            }
+        }
+        try {
+            upsConfigRepository.save(cfg);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("cfg", cfg);
+            model.addAttribute("error", "A config for " + cfg.getKva() + " kVA already exists.");
+            return "admin/ups-config-form";
+        }
         return "redirect:/admin/ups-configs";
     }
 
