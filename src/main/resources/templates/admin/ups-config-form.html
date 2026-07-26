@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UPS Config Form — UPS Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #f5f0e8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; color: #2c2416; }
+    .card { background: #fdfaf5; border: 1px solid #e8dfd0; border-radius: 20px; box-shadow: 0 2px 12px rgba(100,70,30,0.07), 0 8px 32px rgba(100,70,30,0.05); padding: 2.5rem 2.25rem; width: 100%; max-width: 520px; }
+    .card-header { margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid #ede5d8; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; color: #2c2416; }
+    .subtitle { font-size: 0.82rem; color: #9c8b78; margin-top: 0.25rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; font-size: 0.75rem; font-weight: 600; color: #7a6a58; margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.7px; }
+    .hint { font-size: 0.72rem; color: #b8a898; margin-top: 0.25rem; }
+    input[type="text"], input[type="number"], select {
+      width: 100%; padding: 0.7rem 0.95rem; border: 1.5px solid #ddd4c5; border-radius: 10px;
+      font-size: 0.9375rem; font-family: 'DM Sans', system-ui, sans-serif; color: #2c2416;
+      background: #fdfaf5; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%239c8b78' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.95rem center; padding-right: 2.2rem; }
+    input:focus, select:focus { outline: none; border-color: #a0845c; box-shadow: 0 0 0 3px rgba(160,132,92,0.12); }
+    .section-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #a0906e; margin: 1.5rem 0 1rem; }
+    .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+    .btn-primary { flex: 1; padding: 0.75rem; background: #7c5c38; color: #fdf8f2; border: none; border-radius: 10px; font-size: 0.9rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; cursor: pointer; transition: background 0.22s, box-shadow 0.22s, transform 0.1s; box-shadow: 0 2px 8px rgba(124,92,56,0.18); }
+    .btn-primary:hover { background: #6b4e2f; box-shadow: 0 4px 16px rgba(124,92,56,0.28); transform: translateY(-1px); }
+    .btn-cancel { flex: 1; padding: 0.75rem; background: transparent; color: #7a6a58; border: 1.5px solid #ddd4c5; border-radius: 10px; font-size: 0.9rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; text-align: center; transition: border-color 0.2s, color 0.2s; }
+    .btn-cancel:hover { border-color: #a0845c; color: #2c2416; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <h1 th:text="${cfg.id != null} ? 'Edit UPS Config' : 'Add UPS Config'">Add UPS Config</h1>
+    <p class="subtitle">Configure capacity, pricing, and battery sizing parameters</p>
+  </div>
+
+  <form th:action="@{/admin/ups-configs/save}" th:object="${cfg}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+
+    <p class="section-label">Capacity &amp; Pricing</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="kva">UPS Capacity (kVA)</label>
+        <input type="number" id="kva" th:field="*{kva}" placeholder="e.g. 10" min="1"/>
+      </div>
+      <div class="form-group">
+        <label for="upsPrice">UPS Price (₹)</label>
+        <input type="number" id="upsPrice" th:field="*{upsPrice}" placeholder="e.g. 100000" min="0"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="batteryPrice">Price per Battery (₹)</label>
+      <input type="number" id="batteryPrice" th:field="*{batteryPrice}" placeholder="e.g. 2500" min="0"/>
+    </div>
+
+    <p class="section-label">Electrical Parameters</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="loadFactor">Load Factor</label>
+        <input type="number" id="loadFactor" th:field="*{loadFactor}" placeholder="0.8" step="0.01" min="0.1" max="1.0"/>
+        <p class="hint">Actual load as fraction of rated kVA</p>
+      </div>
+      <div class="form-group">
+        <label for="inverterEfficiency">Inverter Efficiency</label>
+        <input type="number" id="inverterEfficiency" th:field="*{inverterEfficiency}" placeholder="0.96" step="0.01" min="0.1" max="1.0"/>
+        <p class="hint">Typically 0.95 – 0.96</p>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="batteriesPerString">Batteries per String</label>
+        <input type="number" id="batteriesPerString" th:field="*{batteriesPerString}" placeholder="e.g. 32" min="1"/>
+        <p class="hint">Series batteries (sets voltage)</p>
+      </div>
+      <div class="form-group">
+        <label for="numStrings">Number of Strings</label>
+        <input type="number" id="numStrings" th:field="*{numStrings}" placeholder="1" min="1"/>
+        <p class="hint">Parallel strings</p>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="ecv">End Cell Voltage (ECV)</label>
+        <select id="ecv" th:field="*{ecv}">
+          <option value="10.8">10.8 V</option>
+          <option value="10.5">10.5 V</option>
+          <option value="10.2">10.2 V</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="active">Status</label>
+        <select id="active" th:field="*{active}">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="/admin/ups-configs" class="btn-cancel">Cancel</a>
+      <button type="submit" class="btn-primary"
+              th:text="${cfg.id != null} ? 'Save Changes' : 'Add Config'">Save</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

@@ -36,6 +36,7 @@ public class SecurityConfig {
             .authorizeRequests(auth -> auth
                 .antMatchers("/login", "/access-denied", "/css/**", "/js/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/calculator/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .antMatchers("/", "/app", "/calculator", "/calculator/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .anyRequest().authenticated()
             )

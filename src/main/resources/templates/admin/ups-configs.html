@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UPS Configs — UPS Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #f5f0e8; min-height: 100vh; color: #2c2416; }
+    nav { background: #fdfaf5; border-bottom: 1px solid #e8dfd0; padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #2c2416; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-link { padding: 0.35rem 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #7a6a58; text-decoration: none; transition: background 0.18s, color 0.18s; display: flex; align-items: center; gap: 0.3rem; }
+    .nav-link:hover, .nav-link.active { background: #f5ede0; color: #2c2416; }
+    .badge-count { display: inline-flex; align-items: center; justify-content: center; background: #7c5c38; color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 0.65rem; font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #7a6a58; }
+    .nav-user img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1.5px solid #ddd4c5; }
+    .avatar-placeholder { width: 30px; height: 30px; border-radius: 50%; background: #f5ede0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: #7c5c38; border: 1.5px solid #ddd4c5; }
+    .btn-logout { padding: 0.4rem 0.9rem; background: transparent; border: 1.5px solid #ddd4c5; border-radius: 8px; font-size: 0.8rem; font-family: 'DM Sans', system-ui, sans-serif; color: #7a6a58; cursor: pointer; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+    .btn-logout:hover { border-color: #a0845c; color: #2c2416; }
+    .container { max-width: 1100px; margin: 2.5rem auto; padding: 0 1.5rem; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+    .page-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; }
+    .page-header p { font-size: 0.85rem; color: #9c8b78; margin-top: 0.2rem; }
+    .btn-primary { padding: 0.62rem 1.25rem; background: #7c5c38; color: #fdf8f2; border: none; border-radius: 10px; font-size: 0.875rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.22s, box-shadow 0.22s, transform 0.1s; box-shadow: 0 2px 8px rgba(124,92,56,0.18); white-space: nowrap; }
+    .btn-primary:hover { background: #6b4e2f; box-shadow: 0 4px 16px rgba(124,92,56,0.28); transform: translateY(-1px); }
+    .card { background: #fdfaf5; border: 1px solid #e8dfd0; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(100,70,30,0.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    thead tr { background: #f5ede0; border-bottom: 1px solid #e8dfd0; }
+    th { padding: 0.75rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #7a6a58; }
+    td { padding: 0.85rem 1rem; border-bottom: 1px solid #f0e8dc; color: #2c2416; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fdf6ee; }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .badge-active { background: #dcfce7; color: #15803d; }
+    .badge-inactive { background: #fee2e2; color: #b91c1c; }
+    .actions { display: flex; gap: 0.4rem; }
+    .btn-sm { padding: 0.3rem 0.7rem; border-radius: 7px; font-size: 0.78rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500; cursor: pointer; border: 1.5px solid transparent; text-decoration: none; transition: all 0.18s; background: transparent; }
+    .btn-edit { border-color: #ddd4c5; color: #5a4a38; }
+    .btn-edit:hover { border-color: #a0845c; color: #2c2416; }
+    .btn-delete { border-color: #fca5a5; color: #b91c1c; }
+    .btn-delete:hover { background: #fee2e2; }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #9c8b78; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="nav-brand">UPS Generator</div>
+    <div class="nav-links">
+      <a href="/admin/dashboard" class="nav-link">Users</a>
+      <a href="/admin/requests" class="nav-link">
+        Requests
+        <span th:if="${pendingCount > 0}" class="badge-count" th:text="${pendingCount}"></span>
+      </a>
+      <a href="/admin/ups-configs" class="nav-link active">UPS Configs</a>
+      <a href="/app" class="nav-link">Calculator</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-user">
+      <img th:if="${adminPicture}" th:src="${adminPicture}" alt="avatar"/>
+      <div th:unless="${adminPicture}" class="avatar-placeholder" th:text="${#strings.substring(adminName, 0, 1)}">A</div>
+      <span th:text="${adminName}">Admin</span>
+    </div>
+    <form th:action="@{/logout}" method="post" style="margin:0;">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+      <button type="submit" class="btn-logout">Sign out</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h2>UPS Configurations</h2>
+      <p>Manage UPS capacities, pricing, and battery sizing parameters</p>
+    </div>
+    <a href="/admin/ups-configs/new" class="btn-primary">+ Add Config</a>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>kVA</th><th>UPS Price</th><th>Battery Price</th>
+          <th>Load Factor</th><th>Efficiency</th><th>Batteries/String</th>
+          <th>Strings</th><th>ECV</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(configs)}">
+          <td colspan="10" class="empty-state">No UPS configurations yet. Add one to get started.</td>
+        </tr>
+        <tr th:each="cfg : ${configs}">
+          <td style="font-weight:600;" th:text="${cfg.kva} + ' kVA'"></td>
+          <td th:text="'₹' + ${#numbers.formatInteger(cfg.upsPrice, 1, 'COMMA')}"></td>
+          <td th:text="'₹' + ${#numbers.formatInteger(cfg.batteryPrice, 1, 'COMMA')}"></td>
+          <td th:text="${cfg.loadFactor}"></td>
+          <td th:text="${cfg.inverterEfficiency}"></td>
+          <td th:text="${cfg.batteriesPerString}"></td>
+          <td th:text="${cfg.numStrings}"></td>
+          <td th:text="${cfg.ecv} + ' V'"></td>
+          <td>
+            <span th:class="${cfg.active} ? 'badge badge-active' : 'badge badge-inactive'"
+                  th:text="${cfg.active} ? 'Active' : 'Inactive'"></span>
+          </td>
+          <td>
+            <div class="actions">
+              <a th:href="@{/admin/ups-configs/{id}/edit(id=${cfg.id})}" class="btn-sm btn-edit">Edit</a>
+              <form th:action="@{/admin/ups-configs/{id}/delete(id=${cfg.id})}" method="post" style="display:inline;"
+                    onsubmit="return confirm('Delete this configuration?')">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn-sm btn-delete">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

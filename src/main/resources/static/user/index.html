@@ -9,229 +9,62 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: #f5f0e8;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-      color: #2c2416;
-    }
-
-    .card {
-      background: #fdfaf5;
-      border-radius: 20px;
-      border: 1px solid #e8dfd0;
-      box-shadow: 0 2px 12px rgba(100,70,30,0.07), 0 8px 32px rgba(100,70,30,0.05);
-      padding: 2.75rem 2.25rem;
-      width: 100%;
-      max-width: 460px;
-    }
-
-    .card-header {
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid #ede5d8;
-    }
-
-    .card-header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.6rem;
-      font-weight: 400;
-      color: #2c2416;
-      letter-spacing: 0.2px;
-    }
-
-    .card-header p {
-      font-size: 0.85rem;
-      color: #9c8b78;
-      margin-top: 0.3rem;
-      font-weight: 400;
-    }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #7a6a58;
-      margin-bottom: 0.45rem;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-    }
-
-    select {
-      width: 100%;
-      padding: 0.7rem 2.2rem 0.7rem 0.95rem;
-      border: 1.5px solid #ddd4c5;
-      border-radius: 10px;
-      font-size: 0.9375rem;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      color: #2c2416;
-      background-color: #fdfaf5;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%239c8b78' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.95rem center;
-      cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    select:focus {
-      outline: none;
-      border-color: #a0845c;
-      box-shadow: 0 0 0 3px rgba(160,132,92,0.12);
-    }
-
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #f5f0e8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; color: #2c2416; }
+    .card { background: #fdfaf5; border-radius: 20px; border: 1px solid #e8dfd0; box-shadow: 0 2px 12px rgba(100,70,30,0.07), 0 8px 32px rgba(100,70,30,0.05); padding: 2.75rem 2.25rem; width: 100%; max-width: 460px; }
+    .card-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #ede5d8; }
+    .card-header h1 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; font-weight: 400; color: #2c2416; letter-spacing: 0.2px; text-align: center; }
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; font-size: 0.75rem; font-weight: 600; color: #7a6a58; margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.7px; }
+    select { width: 100%; padding: 0.7rem 2.2rem 0.7rem 0.95rem; border: 1.5px solid #ddd4c5; border-radius: 10px; font-size: 0.9375rem; font-family: 'DM Sans', system-ui, sans-serif; color: #2c2416; background-color: #fdfaf5; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%239c8b78' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.95rem center; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
+    select:focus { outline: none; border-color: #a0845c; box-shadow: 0 0 0 3px rgba(160,132,92,0.12); }
     select:disabled { background-color: #f5efe6; color: #b8a898; cursor: not-allowed; }
-
-    .btn {
-      width: 100%;
-      padding: 0.78rem;
-      background: #7c5c38;
-      color: #fdf8f2;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: background 0.22s, box-shadow 0.22s, transform 0.1s;
-      box-shadow: 0 2px 8px rgba(124,92,56,0.18);
-    }
-
-    .btn:hover {
-      background: #6b4e2f;
-      box-shadow: 0 4px 16px rgba(124,92,56,0.28);
-      transform: translateY(-1px);
-    }
-
-    .btn:active {
-      transform: translateY(0) scale(0.99);
-      box-shadow: 0 1px 4px rgba(124,92,56,0.15);
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #ede5d8;
-      margin: 1.75rem 0;
-    }
-
-    .section-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #a0906e;
-      margin-bottom: 1rem;
-    }
-
-    .result-grid {
-      display: grid;
-      gap: 0;
-    }
-
-    .result-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid #f0e8dc;
-    }
-
+    .btn { width: 100%; padding: 0.78rem; background: #7c5c38; color: #fdf8f2; border: none; border-radius: 10px; font-size: 0.9rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; letter-spacing: 0.3px; cursor: pointer; margin-top: 0.5rem; transition: background 0.22s, box-shadow 0.22s, transform 0.1s; box-shadow: 0 2px 8px rgba(124,92,56,0.18); }
+    .btn:hover { background: #6b4e2f; box-shadow: 0 4px 16px rgba(124,92,56,0.28); transform: translateY(-1px); }
+    .btn:disabled { background: #c4a882; cursor: not-allowed; transform: none; box-shadow: none; }
+    .divider { border: none; border-top: 1px solid #ede5d8; margin: 1.75rem 0; }
+    .section-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #a0906e; margin-bottom: 1rem; }
+    .result-grid { display: grid; gap: 0; }
+    .result-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; padding: 0.55rem 0; border-bottom: 1px solid #f0e8dc; }
     .result-row:last-child { border-bottom: none; }
-
     .result-row .label { color: #9c8b78; font-weight: 400; }
     .result-row .value { font-weight: 600; color: #2c2416; }
-
-    .result-row.highlight {
-      background: #f5ede0;
-      border-radius: 10px;
-      padding: 0.75rem 0.9rem;
-      margin-top: 0.6rem;
-      border-bottom: none;
-    }
-
+    .result-row.highlight { background: #f5ede0; border-radius: 10px; padding: 0.75rem 0.9rem; margin-top: 0.6rem; border-bottom: none; }
     .result-row.highlight .label { color: #7c5c38; font-weight: 600; font-size: 0.9rem; }
     .result-row.highlight .value { color: #7c5c38; font-size: 1.05rem; font-weight: 700; }
-
+    .error-msg { font-size: 0.82rem; color: #b91c1c; background: #fee2e2; border-radius: 8px; padding: 0.6rem 0.9rem; margin-top: 0.75rem; display: none; }
+    .spinner { display: none; text-align: center; padding: 1rem 0; color: #9c8b78; font-size: 0.85rem; }
     #results { display: none; }
-    #battery-section { display: none; }
-
-    .error {
-      font-size: 0.8rem;
-      color: #c0392b;
-      margin-top: 0.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
   </style>
 </head>
 <body>
 <div class="card">
   <div class="card-header">
-    <h1 style="text-align: center;">UPS Price Estimator</h1>
-    <!-- <p>Calculate battery &amp; total system cost</p> -->
+    <h1>UPS Price Estimator</h1>
   </div>
 
-  <!-- Step 1: Configuration -->
   <div class="form-group">
     <label for="ups-capacity">UPS Capacity</label>
     <select id="ups-capacity">
-      <option value="">Select capacity</option>
-      <option value="10">10 kVA</option>
-      <option value="20">20 kVA</option>
+      <option value="">Loading...</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="backup-time">Backup Time</label>
     <select id="backup-time">
-      <option value="">Select backup time</option>
-      <option value="15">15 Minutes</option>
-      <option value="30">30 Minutes</option>
+      <option value="">Loading...</option>
     </select>
   </div>
 
-  <div id="form-error" class="error" style="display:none;">&#9679; Please select both UPS Capacity and Backup Time.</div>
+  <div class="error-msg" id="form-error">Please select both UPS Capacity and Backup Time.</div>
 
-  <button class="btn" onclick="handleSubmit()">Submit</button>
+  <button class="btn" id="submit-btn" onclick="calculate()">Calculate</button>
 
-  <!-- Step 2: Battery Selection -->
-  <div id="battery-section">
-    <hr class="divider" />
-    <p class="section-title">Battery Configuration</p>
-    <div class="result-grid" style="margin-bottom:1rem;">
-      <div class="result-row">
-        <span class="label">Battery AH</span>
-        <span class="value">26 AH</span>
-      </div>
-    </div>
-    <div class="form-group" style="margin-bottom:0;">
-      <label for="battery-qty">Battery Quantity</label>
-      <select id="battery-qty" onchange="calculate()">
-        <option value="">Select quantity</option>
-        <option value="16">16 Batteries</option>
-        <option value="18">18 Batteries</option>
-        <option value="20">20 Batteries</option>
-      </select>
-    </div>
-  </div>
+  <div class="spinner" id="spinner">Calculating...</div>
 
-  <!-- Step 3: Results -->
   <div id="results">
     <hr class="divider" />
-    <p class="section-title">Price Breakdown</p>
+    <p class="section-title">Battery Sizing</p>
     <div class="result-grid">
       <div class="result-row">
         <span class="label">UPS Capacity</span>
@@ -242,24 +75,45 @@
         <span class="value" id="r-backup">—</span>
       </div>
       <div class="result-row">
-        <span class="label">Battery AH</span>
-        <span class="value">26 AH</span>
+        <span class="label">Watts Required / Battery</span>
+        <span class="value" id="r-watts-req">—</span>
       </div>
       <div class="result-row">
-        <span class="label">Battery Quantity</span>
-        <span class="value" id="r-qty">—</span>
+        <span class="label">Recommended Battery</span>
+        <span class="value" id="r-battery-ah">—</span>
       </div>
       <div class="result-row">
-        <span class="label">Cost per Battery</span>
-        <span class="value" id="r-unit-cost">—</span>
+        <span class="label">Watts Provided / Battery</span>
+        <span class="value" id="r-watts-prov">—</span>
       </div>
       <div class="result-row">
-        <span class="label">Battery Price</span>
-        <span class="value" id="r-battery-price">—</span>
+        <span class="label">Batteries per String</span>
+        <span class="value" id="r-per-string">—</span>
       </div>
+      <div class="result-row">
+        <span class="label">Number of Strings</span>
+        <span class="value" id="r-strings">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Total Batteries</span>
+        <span class="value" id="r-total-batt">—</span>
+      </div>
+    </div>
+
+    <hr class="divider" />
+    <p class="section-title">Price Breakdown</p>
+    <div class="result-grid">
       <div class="result-row">
         <span class="label">UPS Price</span>
         <span class="value" id="r-ups-price">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Price per Battery</span>
+        <span class="value" id="r-unit-cost">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Total Battery Price</span>
+        <span class="value" id="r-battery-price">—</span>
       </div>
       <div class="result-row highlight">
         <span class="label">Total Price</span>
@@ -270,48 +124,86 @@
 </div>
 
 <script>
-  const BATTERY_COST = 2500;          // ₹ per battery
-  const UPS_PRICE = { 10: 100000, 20: 200000 }; // ₹ per kVA capacity
+  const fmt = n => '₹' + Number(n).toLocaleString('en-IN');
 
-  const fmt = n => '₹' + n.toLocaleString('en-IN');
+  async function loadDropdowns() {
+    const [cfgRes, timeRes] = await Promise.all([
+      fetch('/api/calculator/configs'),
+      fetch('/api/calculator/backup-times')
+    ]);
+    const configs = await cfgRes.json();
+    const times   = await timeRes.json();
 
-  function handleSubmit() {
-    const capacity = document.getElementById('ups-capacity').value;
-    const backup   = document.getElementById('backup-time').value;
-    const errEl    = document.getElementById('form-error');
+    const capSel = document.getElementById('ups-capacity');
+    capSel.innerHTML = '<option value="">Select capacity</option>';
+    configs.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.kva;
+      o.textContent = c.label;
+      capSel.appendChild(o);
+    });
 
-    if (!capacity || !backup) {
+    const timeSel = document.getElementById('backup-time');
+    timeSel.innerHTML = '<option value="">Select backup time</option>';
+    times.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t;
+      o.textContent = t + ' Minutes';
+      timeSel.appendChild(o);
+    });
+  }
+
+  async function calculate() {
+    const kva     = document.getElementById('ups-capacity').value;
+    const minutes = document.getElementById('backup-time').value;
+    const errEl   = document.getElementById('form-error');
+
+    if (!kva || !minutes) {
       errEl.style.display = 'block';
       return;
     }
-
     errEl.style.display = 'none';
-    document.getElementById('battery-qty').value = '';
+
     document.getElementById('results').style.display = 'none';
-    document.getElementById('battery-section').style.display = 'block';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('submit-btn').disabled = true;
+
+    try {
+      const res  = await fetch(`/api/calculator/calculate?kva=${kva}&backupMinutes=${minutes}`);
+      const data = await res.json();
+
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('submit-btn').disabled = false;
+
+      if (data.error) {
+        errEl.textContent = data.error;
+        errEl.style.display = 'block';
+        return;
+      }
+
+      document.getElementById('r-capacity').textContent   = data.upsKva + ' kVA';
+      document.getElementById('r-backup').textContent     = data.backupMinutes + ' Minutes';
+      document.getElementById('r-watts-req').textContent  = data.wattsPerBatteryRequired + ' W';
+      document.getElementById('r-battery-ah').textContent = data.recommendedBatteryAh + ' AH';
+      document.getElementById('r-watts-prov').textContent = data.wattsPerBatteryProvided + ' W';
+      document.getElementById('r-per-string').textContent = data.batteriesPerString;
+      document.getElementById('r-strings').textContent    = data.numStrings;
+      document.getElementById('r-total-batt').textContent = data.totalBatteries + ' batteries';
+      document.getElementById('r-ups-price').textContent  = fmt(data.upsPrice);
+      document.getElementById('r-unit-cost').textContent  = fmt(data.pricePerBattery);
+      document.getElementById('r-battery-price').textContent = fmt(data.totalBatteryPrice);
+      document.getElementById('r-total').textContent      = fmt(data.totalPrice);
+
+      document.getElementById('results').style.display = 'block';
+    } catch (e) {
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('submit-btn').disabled = false;
+      errEl.textContent = 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+    }
   }
 
-  function calculate() {
-    const qty      = parseInt(document.getElementById('battery-qty').value);
-    const capacity = parseInt(document.getElementById('ups-capacity').value);
-    const backup   = document.getElementById('backup-time').value;
-
-    if (!qty) { document.getElementById('results').style.display = 'none'; return; }
-
-    const upsPrice     = UPS_PRICE[capacity];
-    const batteryPrice = qty * BATTERY_COST;
-    const totalPrice   = upsPrice + batteryPrice;
-
-    document.getElementById('r-capacity').textContent      = capacity + ' kVA';
-    document.getElementById('r-backup').textContent        = backup + ' Minutes';
-    document.getElementById('r-qty').textContent           = qty;
-    document.getElementById('r-unit-cost').textContent     = fmt(BATTERY_COST);
-    document.getElementById('r-battery-price').textContent = fmt(batteryPrice);
-    document.getElementById('r-ups-price').textContent     = fmt(upsPrice);
-    document.getElementById('r-total').textContent         = fmt(totalPrice);
-
-    document.getElementById('results').style.display = 'block';
-  }
+  loadDropdowns();
 </script>
 </body>
 </html>
