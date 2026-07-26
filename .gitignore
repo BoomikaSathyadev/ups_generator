@@ -1,0 +1,7 @@
+target/
+*.log
+*.class
+*.jar
+
+# Local credentials
+src/main/resources/application-local.properties

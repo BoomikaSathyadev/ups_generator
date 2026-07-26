@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Form — UPS Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #f5f0e8;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1rem;
+      color: #2c2416;
+    }
+
+    .card {
+      background: #fdfaf5;
+      border: 1px solid #e8dfd0;
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(100,70,30,0.07), 0 8px 32px rgba(100,70,30,0.05);
+      padding: 2.5rem 2.25rem;
+      width: 100%; max-width: 440px;
+    }
+
+    .card-header { margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid #ede5d8; }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; font-weight: 400; color: #2c2416;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+
+    label {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      color: #7a6a58; margin-bottom: 0.45rem;
+      text-transform: uppercase; letter-spacing: 0.7px;
+    }
+
+    input[type="text"], input[type="email"], select {
+      width: 100%;
+      padding: 0.7rem 0.95rem;
+      border: 1.5px solid #ddd4c5;
+      border-radius: 10px;
+      font-size: 0.9375rem;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: #2c2416;
+      background: #fdfaf5;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%239c8b78' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.95rem center;
+      padding-right: 2.2rem;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #a0845c;
+      box-shadow: 0 0 0 3px rgba(160,132,92,0.12);
+    }
+
+    .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+
+    .btn-primary {
+      flex: 1; padding: 0.75rem;
+      background: #7c5c38; color: #fdf8f2;
+      border: none; border-radius: 10px;
+      font-size: 0.9rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600;
+      cursor: pointer;
+      transition: background 0.22s, box-shadow 0.22s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(124,92,56,0.18);
+    }
+    .btn-primary:hover { background: #6b4e2f; box-shadow: 0 4px 16px rgba(124,92,56,0.28); transform: translateY(-1px); }
+
+    .btn-cancel {
+      flex: 1; padding: 0.75rem;
+      background: transparent; color: #7a6a58;
+      border: 1.5px solid #ddd4c5; border-radius: 10px;
+      font-size: 0.9rem; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500;
+      cursor: pointer; text-decoration: none; text-align: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-cancel:hover { border-color: #a0845c; color: #2c2416; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <h1 th:text="${userDto.id != null} ? 'Edit User' : 'Add User'">Add User</h1>
+  </div>
+
+  <form th:action="@{/admin/users/save}" th:object="${userDto}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" th:field="*{name}" placeholder="Enter full name"/>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" th:field="*{email}" placeholder="user@example.com"
+             th:readonly="${userDto.id != null}"/>
+    </div>
+
+    <div class="form-group">
+      <label for="role">Role</label>
+      <select id="role" th:field="*{role}">
+        <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" th:field="*{status}">
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <a href="/admin/dashboard" class="btn-cancel">Cancel</a>
+      <button type="submit" class="btn-primary"
+              th:text="${userDto.id != null} ? 'Save Changes' : 'Add User'">Save</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

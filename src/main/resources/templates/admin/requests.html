@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Access Requests — UPS Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #f5f0e8; min-height: 100vh; color: #2c2416; }
+
+    nav {
+      background: #fdfaf5; border-bottom: 1px solid #e8dfd0;
+      padding: 0 2rem; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #2c2416; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-link {
+      padding: 0.35rem 0.8rem; border-radius: 8px;
+      font-size: 0.85rem; color: #7a6a58; text-decoration: none;
+      transition: background 0.18s, color 0.18s; display: flex; align-items: center; gap: 0.3rem;
+    }
+    .nav-link:hover, .nav-link.active { background: #f5ede0; color: #2c2416; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #7a6a58; }
+    .nav-user img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1.5px solid #ddd4c5; }
+    .avatar-placeholder {
+      width: 30px; height: 30px; border-radius: 50%; background: #f5ede0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 600; color: #7c5c38; border: 1.5px solid #ddd4c5;
+    }
+    .btn-logout {
+      padding: 0.4rem 0.9rem; background: transparent; border: 1.5px solid #ddd4c5;
+      border-radius: 8px; font-size: 0.8rem; font-family: 'DM Sans', system-ui, sans-serif;
+      color: #7a6a58; cursor: pointer; text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-logout:hover { border-color: #a0845c; color: #2c2416; }
+
+    .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 1.5rem; }
+    .page-header { margin-bottom: 1.75rem; }
+    .page-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; }
+    .page-header p { font-size: 0.85rem; color: #9c8b78; margin-top: 0.2rem; }
+
+    .card { background: #fdfaf5; border: 1px solid #e8dfd0; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(100,70,30,0.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    thead tr { background: #f5ede0; border-bottom: 1px solid #e8dfd0; }
+    th { padding: 0.75rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #7a6a58; }
+    td { padding: 0.85rem 1rem; border-bottom: 1px solid #f0e8dc; color: #2c2416; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fdf6ee; }
+
+    .user-info { display: flex; align-items: center; gap: 0.6rem; }
+    .user-info img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid #ddd4c5; }
+    .avatar-sm {
+      width: 32px; height: 32px; border-radius: 50%; background: #f5ede0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 600; color: #7c5c38; border: 1.5px solid #ddd4c5;
+    }
+
+    .role-select {
+      padding: 0.3rem 0.6rem; border: 1.5px solid #ddd4c5; border-radius: 7px;
+      font-size: 0.82rem; font-family: 'DM Sans', system-ui, sans-serif;
+      background: #fdfaf5; color: #2c2416; cursor: pointer;
+    }
+    .role-select:focus { outline: none; border-color: #a0845c; }
+
+    .actions { display: flex; gap: 0.4rem; align-items: center; }
+    .btn-accept {
+      padding: 0.3rem 0.8rem; border-radius: 7px; font-size: 0.78rem;
+      font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500;
+      cursor: pointer; border: 1.5px solid #86efac; color: #15803d;
+      background: transparent; transition: all 0.18s;
+    }
+    .btn-accept:hover { background: #dcfce7; }
+    .btn-deny {
+      padding: 0.3rem 0.8rem; border-radius: 7px; font-size: 0.78rem;
+      font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500;
+      cursor: pointer; border: 1.5px solid #fca5a5; color: #b91c1c;
+      background: transparent; transition: all 0.18s;
+    }
+    .btn-deny:hover { background: #fee2e2; }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #9c8b78; font-size: 0.9rem; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(44,36,22,0.35); backdrop-filter: blur(2px);
+      z-index: 100; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fdfaf5; border: 1px solid #e8dfd0; border-radius: 20px;
+      padding: 2rem 2rem 1.75rem; width: 100%; max-width: 380px;
+      box-shadow: 0 8px 32px rgba(100,70,30,0.14);
+      animation: pop 0.18s ease;
+    }
+    @keyframes pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-icon {
+      width: 44px; height: 44px; background: #f5ede0; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+    .modal h3 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 0.5rem; }
+    .modal p { font-size: 0.875rem; color: #7a6a58; line-height: 1.6; margin-bottom: 1.5rem; }
+    .modal-name { font-weight: 600; color: #2c2416; }
+    .modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; }
+    .btn-modal-cancel {
+      padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem;
+      font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500;
+      cursor: pointer; border: 1.5px solid #ddd4c5; color: #7a6a58; background: transparent;
+      transition: all 0.18s;
+    }
+    .btn-modal-cancel:hover { border-color: #a0845c; color: #2c2416; }
+    .btn-modal-confirm-accept {
+      padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.85rem;
+      font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600;
+      cursor: pointer; border: none; background: #7c5c38; color: #fdf8f2;
+      box-shadow: 0 2px 8px rgba(124,92,56,0.18); transition: all 0.18s;
+    }
+    .btn-modal-confirm-accept:hover { background: #6b4e2f; }
+    .btn-modal-confirm-deny {
+      padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.85rem;
+      font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600;
+      cursor: pointer; border: none; background: #b91c1c; color: #fff;
+      box-shadow: 0 2px 8px rgba(185,28,28,0.18); transition: all 0.18s;
+    }
+    .btn-modal-confirm-deny:hover { background: #991b1b; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="nav-brand">UPS Generator</div>
+    <div class="nav-links">
+      <a href="/admin/dashboard" class="nav-link">Users</a>
+      <a href="/admin/requests" class="nav-link active">Requests</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-user">
+      <img th:if="${adminPicture}" th:src="${adminPicture}" alt="avatar"/>
+      <div th:unless="${adminPicture}" class="avatar-placeholder" th:text="${#strings.substring(adminName, 0, 1)}">A</div>
+      <span th:text="${adminName}">Admin</span>
+    </div>
+    <a href="/logout" class="btn-logout">Sign out</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h2>Access Requests</h2>
+    <p>Review and approve or deny login requests from new users</p>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>#</th><th>User</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(requests)}">
+          <td colspan="5" class="empty-state">No pending requests. All caught up!</td>
+        </tr>
+        <tr th:each="req, stat : ${requests}">
+          <td th:text="${stat.count}" style="color:#9c8b78;font-size:0.82rem;"></td>
+          <td>
+            <div class="user-info">
+              <img th:if="${req.pictureUrl}" th:src="${req.pictureUrl}" alt="avatar"/>
+              <div th:unless="${req.pictureUrl}" class="avatar-sm" th:text="${req.name != null ? #strings.substring(req.name, 0, 1) : '?'}"></div>
+              <span th:text="${req.name ?: '—'}"></span>
+            </div>
+          </td>
+          <td th:text="${req.email}"></td>
+          <td>
+            <select th:id="'role-' + ${req.id}" class="role-select">
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </td>
+          <td>
+            <div class="actions">
+              <button type="button" class="btn-accept"
+                      th:attr="onclick='openAccept(' + ${req.id} + ', \'' + ${req.name} + '\', \'' + ${req.email} + '\')'">Accept</button>
+              <button type="button" class="btn-deny"
+                      th:attr="onclick='openDeny(' + ${req.id} + ', \'' + ${req.name} + '\')'">Deny</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Accept Modal -->
+<div class="modal-overlay" id="acceptModal">
+  <div class="modal">
+    <div class="modal-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#15803d" stroke-width="1.8"/><path d="M8 12l3 3 5-5" stroke="#15803d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3>Accept Request</h3>
+    <p>Grant access to <span class="modal-name" id="acceptName"></span>?<br/>
+    They will be able to login as <strong id="acceptRoleDisplay"></strong>.</p>
+    <form id="acceptForm" method="post">
+      <input type="hidden" name="role" id="acceptRoleInput"/>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" onclick="closeModals()">Cancel</button>
+        <button type="submit" class="btn-modal-confirm-accept">Accept</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Deny Modal -->
+<div class="modal-overlay" id="denyModal">
+  <div class="modal">
+    <div class="modal-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#b91c1c" stroke-width="1.8"/><path d="M15 9l-6 6M9 9l6 6" stroke="#b91c1c" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <h3>Deny Request</h3>
+    <p>Deny access for <span class="modal-name" id="denyName"></span>?<br/>
+    This will remove their request permanently.</p>
+    <form id="denyForm" method="post">
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" onclick="closeModals()">Cancel</button>
+        <button type="submit" class="btn-modal-confirm-deny">Deny</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openAccept(id, name, email) {
+    const role = document.getElementById('role-' + id).value;
+    document.getElementById('acceptName').textContent = name || email;
+    document.getElementById('acceptRoleDisplay').textContent = role;
+    document.getElementById('acceptRoleInput').value = role;
+    document.getElementById('acceptForm').action = '/admin/requests/' + id + '/accept';
+    document.getElementById('acceptModal').classList.add('open');
+  }
+
+  function openDeny(id, name) {
+    document.getElementById('denyName').textContent = name || 'this user';
+    document.getElementById('denyForm').action = '/admin/requests/' + id + '/deny';
+    document.getElementById('denyModal').classList.add('open');
+  }
+
+  function closeModals() {
+    document.getElementById('acceptModal').classList.remove('open');
+    document.getElementById('denyModal').classList.remove('open');
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) closeModals(); });
+  });
+</script>
+
+</body>
+</html>

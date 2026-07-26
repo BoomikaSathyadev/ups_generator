@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Access Denied — UPS Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #f5f0e8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      color: #2c2416;
+    }
+
+    .card {
+      background: #fdfaf5;
+      border: 1px solid #e8dfd0;
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(100,70,30,0.07), 0 8px 32px rgba(100,70,30,0.05);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .icon {
+      width: 52px; height: 52px; background: #f5ede0; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #7a6a58;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.72rem 1.75rem;
+      background: #7c5c38;
+      color: #fdf8f2;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.22s, box-shadow 0.22s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(124,92,56,0.18);
+    }
+
+    .btn:hover {
+      background: #6b4e2f;
+      box-shadow: 0 4px 16px rgba(124,92,56,0.28);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">
+    <svg th:if="${!pending}" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="11" width="18" height="11" rx="2" stroke="#7c5c38" stroke-width="1.8"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#7c5c38" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <svg th:if="${pending}" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="9" stroke="#7c5c38" stroke-width="1.8"/>
+      <path d="M12 7v5l3 3" stroke="#7c5c38" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h1 th:text="${pending} ? 'Request Submitted' : 'Access Denied'">Access Denied</h1>
+  <p th:text="${message}">Your account is not authorized to access this application. Please contact your administrator.</p>
+  <a href="/login" class="btn">Back to Sign In</a>
+</div>
+</body>
+</html>
