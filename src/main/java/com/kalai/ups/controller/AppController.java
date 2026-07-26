@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AppController {
 
-    @GetMapping({"/", "/app"})
+    @GetMapping({"/", "/app", "/calculator", "/calculator/**"})
     public String app() {
         return "forward:/user/index.html";
     }
